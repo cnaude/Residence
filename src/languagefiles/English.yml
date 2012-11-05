@@ -3,7 +3,8 @@
 # when a newer version is detected, and your changes will be overwritten.  Once you 
 # have a copy of this file, change the Language: option under the Residence config.yml
 # to whatever you named your copy.
-Version: 18
+Version: 21
+FieldsVersion: 22
 Language:
     # The below lines represent various messages residence sends to the players.
     # Note that some messages have variables such as %1 that are inserted at runtime.
@@ -60,7 +61,7 @@ Language:
     SelectionSky: Selection expanded to your highest allowed limit.
     SelectionArea: 'Selected area %1 of residence %2'
     SelectDiabled: You don't have access to selections commands.
-    NoPermission: You dont have permission for this.
+    NoPermission: You do not have permission for this.
     OwnerNoPermission: The owner does not have permission for this.
     ParentNoPermission: You don't have permission to make changes to the parent zone.
     MessageChange: Message Set...
@@ -78,8 +79,8 @@ Language:
     MarketList: Market List
     SelectionTool: Selection Tool
     InfoTool: Info Tool
-    NoBankAccess: You dont have bank access.
-    NotEnoughMoney: You dont have enough money.
+    NoBankAccess: You do not have bank access.
+    NotEnoughMoney: You do not have enough money.
     BankNoMoney: Not enough money in the bank.
     BankDeposit: 'You deposit %1 into the residence bank.'
     BankWithdraw: 'You withdraw %1 from the residence bank.'
@@ -130,15 +131,15 @@ Language:
     RentedModifyDeny: Cannot modify a rented residence.
     WorldPVPDisabled: World PVP is disabled.
     NoPVPZone: No PVP zone.
-    FlagDeny: 'You dont have %1 permission here.'
+    FlagDeny: 'You do not have %1 permission here.'
     FlagSetDeny: 'Owner does not have access to flag %1'
     SelectPoint: 'Placed %1 Selection Point'
     ResidenceChat: 'Residence chat toggled %1'
-    ResidenceMoveDeny: 'You dont have movment permission for Residence %1'
-    TeleportDeny: You dont have teleport access.
+    ResidenceMoveDeny: 'You do not have movement permission for Residence %1'
+    TeleportDeny: You do not have teleport access.
     TeleportSuccess: 'Teleported!'
     TeleportNear: Teleported to near residence.
-    TeleportNoFlag: You dont have teleport access for that residence.
+    TeleportNoFlag: You do not have teleport access for that residence.
     SetTeleportLocation: Teleport Location Set...
     HelpPageHeader: 'Help Pages - %1 - Page <%2 of %3>'
     ListExists: List already exists...
@@ -176,7 +177,19 @@ Language:
     SelectTooHigh: Warning, selection went above top of map, limiting.
     SelectTooLow: Warning, selection went below bottom of map, limiting.
     WorldEditNotFound: WorldEdit was not detected.
+    #Version 19 New Fields
     NoResHere: There is no residence in there.
+    DeleteSubzoneConfirm: 'Are you sure you want to delete subzone %1, use "/res confirm" to confirm.'
+    #Version 20 New Fields
+    SubzoneOwnerChange: 'Subzone %1 owner changed to %2'
+    CoordsTop: 'X:%1 Y:%2 Z:%3'
+    CoordsBottom: 'X:%1 Y:%2 Z:%3'
+    #Version 21 New Fields
+    AdminToggle: 'Automatic resadmin toggle turned %1'
+    #Version 22 New Fields
+    NoSpawn: 'You do not have move permissions at your spawn point.  Relocating'
+    CompassTargetReset: 'Your compass has been reset'
+    CompassTargetSet: 'Your compass now points to %1'
     
     #The below lines are mostly a word bank for various uses.
     #Version 1 Fields
@@ -213,6 +226,12 @@ Language:
     World: World
     #Version 12 Fields
     Subzones: Subzones
+    #Version 20 Fields
+    CoordsT: Top Coords
+    CoordsB: Bottom Coords
+    #Version 22 Fields
+    TurnOn: 'on'
+    TurnOff: 'off'
     
 # This is the help / usage messages for each command.
 # It follows this format:
@@ -422,6 +441,7 @@ CommandHelp: #this is just a holder node, that holds the entire help
                         - 'use - allows or denys use of doors, lever, buttons, etc...'
                         - 'move - allows or denys movement in the residence.'
                         - 'container - allows or denys use of furnaces, chests, dispensers, etc...'
+                        - 'trusted - Gives build, use, move, container and tp flags'
                         - 'place - allows or denys only placement of blocks, overrides the build flag.'
                         - 'destroy - allows or denys only destruction of blocks, overrides the build flag.'
                         - 'pvp - allow or deny pvp in the residence'
@@ -442,6 +462,21 @@ CommandHelp: #this is just a holder node, that holds the entire help
                         - 'damage - allows or denys all entity damage within the residence.'
                         - 'piston - allow or deny pistons from pushing or pulling blocks in the residence.'
                         - 'hidden - hides residence from list or listall commands.'
+                        - 'cake - allows or denys players to eat cake'
+                        - 'lever - allows or denys players to use levers'
+                        - 'button - allows or denys players to use buttons'
+                        - 'diode - allows or denys players to use redstone repeaters'
+                        - 'door - allows or denys players to use doors and trapdoors'
+                        - 'table - allows or denys players to use workbenches'
+                        - 'enchant - allows or denys players to use enchanting tables'
+                        - 'brew - allows or denys players to use brewing stands'
+                        - 'bed - allows or denys players to use beds'
+                        - 'button - allows or denys players to use buttons'
+                        - 'pressure - allows or denys players to use pressure plates'
+                        - 'note - allows or denys players to use note blocks'
+                        - 'redstone - Gives lever, diode, button, pressure, note flags'
+                        - 'craft - Gives table, enchant, brew flags'
+                        - 'burn - allows or denys Mob combustion in residences'
                 list:
                     Description: List Residences
                     Info:
@@ -458,7 +493,7 @@ CommandHelp: #this is just a holder node, that holds the entire help
                     Description: List All Residences
                     Info:
                         - 'Usage: /res listall <page>'
-                        - 'Lists all residences on the server. (except hidden ones that you dont own)'
+                        - 'Lists all residences on the server. (except hidden ones that you do not own)'
                 listallhidden:
                     Description: List All Hidden Residences (ADMIN ONLY)
                     Info:
@@ -502,18 +537,18 @@ CommandHelp: #this is just a holder node, that holds the entire help
                         sell:
                             Description: Sell a residence
                             Info:
-                                - 'Usage: /res sell [residence] [amount]'
+                                - 'Usage: /res market sell [residence] [amount]'
                                 - 'Puts a residence for sale for [amount] of money.'
                                 - 'Another player can buy the residence with /res market buy'
                         buy:
                             Description: Buy a residence
                             Info:
-                                - 'Usage: /res buy [residence]'
+                                - 'Usage: /res market buy [residence]'
                                 - 'Buys a Residence if its for sale.'
                         unsell:
                             Description: Stops selling a residence
                             Info:
-                                - 'Usage: /res unsell [residence]'
+                                - 'Usage: /res market unsell [residence]'
                         rent:
                             Description: Rent a residence
                             Info:
