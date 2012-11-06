@@ -4,35 +4,26 @@
  */
 
 package com.bekvon.bukkit.residence.selection;
-import org.bukkit.ChatColor;
-
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.permissions.PermissionGroup;
 import com.bekvon.bukkit.residence.protection.CuboidArea;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldedit.bukkit.selections.Selection;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 /**
  *
  * @author Administrator
  */
 public class SelectionManager {
-    private Map<String,Location> playerLoc1;
-    private Map<String,Location> playerLoc2;
-    private boolean worldEditEnabled = false;
-    private Server server;
+    protected Map<String,Location> playerLoc1;
+    protected Map<String,Location> playerLoc2;
+    protected Server server;
 
     public static final int MAX_HEIGHT = 255,MIN_HEIGHT = 0;
     
@@ -46,26 +37,22 @@ public class SelectionManager {
     	this.server = server;
         playerLoc1 = Collections.synchronizedMap(new HashMap<String,Location>());
         playerLoc2 = Collections.synchronizedMap(new HashMap<String,Location>());
-        Plugin p = server.getPluginManager().getPlugin("WorldEdit");
-        if(p!=null){
-        	worldEditEnabled = true;
-        	Logger.getLogger("Minecraft").log(Level.INFO, "[Residence] Found WorldEdit");
-        } else {
-        	worldEditEnabled = false;
-        	Logger.getLogger("Minecraft").log(Level.INFO, "[Residence] WorldEdit NOT found!");
+    }
+
+    public void placeLoc1(Player player, Location loc)
+    {
+        if(loc!=null)
+        {
+            playerLoc1.put(player.getName(), loc);
         }
     }
 
-    public void placeLoc1(String player, Location loc)
+    public void placeLoc2(Player player, Location loc)
     {
         if(loc!=null)
-            playerLoc1.put(player, loc);
-    }
-
-    public void placeLoc2(String player, Location loc)
-    {
-        if(loc!=null)
-            playerLoc2.put(player, loc);
+        {
+            playerLoc2.put(player.getName(), loc);
+        }
     }
 
     public Location getPlayerLoc1(String player)
@@ -210,25 +197,17 @@ public class SelectionManager {
         player.sendMessage(ChatColor.GREEN+Residence.getLanguage().getPhrase("SelectionSuccess"));
     }
 
-	public void worldEdit(Player player) {
-		if (worldEditEnabled){
-		WorldEditPlugin wep = (WorldEditPlugin) server.getPluginManager().getPlugin("WorldEdit");
-		Selection sel = wep.getSelection(player);
-		this.playerLoc1.put(player.getName(), sel.getMinimumPoint());
-		this.playerLoc2.put(player.getName(), sel.getMaximumPoint());
-		player.sendMessage(ChatColor.GREEN+Residence.getLanguage().getPhrase("SelectionSuccess"));
-		}
-		else {
-			player.sendMessage(ChatColor.RED+Residence.getLanguage().getPhrase("WorldEditNotFound"));
-		}
-	}
+    public boolean worldEdit(Player player) {
+        player.sendMessage(ChatColor.RED+Residence.getLanguage().getPhrase("WorldEditNotFound"));
+        return false;
+    }
 
     public void selectBySize(Player player, int xsize, int ysize, int zsize) {
         Location myloc = player.getLocation();
         Location loc1 = new Location(myloc.getWorld(), myloc.getBlockX() + xsize, myloc.getBlockY() + ysize, myloc.getBlockZ() + zsize);
         Location loc2 = new Location(myloc.getWorld(), myloc.getBlockX() - xsize, myloc.getBlockY() - ysize, myloc.getBlockZ() - zsize);
-        placeLoc1(player.getName(), loc1);
-        placeLoc2(player.getName(), loc2);
+        placeLoc1(player, loc1);
+        placeLoc2(player, loc2);
         player.sendMessage(ChatColor.GREEN+Residence.getLanguage().getPhrase("SelectionSuccess"));
         showSelectionInfo(player);
     }
@@ -364,7 +343,7 @@ public class SelectionManager {
             return Direction.MINUSX;
         if((yaw>135 && yaw<225) || (yaw<-135 && yaw>-225))
             return Direction.MINUSZ;
-        if((yaw<45 || yaw>315) || (yaw>-45 && yaw<-315))
+        if((yaw<45 || yaw>315) || (yaw>-45 || yaw<-315))
             return Direction.PLUSZ;
         return null;
     }

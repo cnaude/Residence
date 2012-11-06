@@ -54,6 +54,10 @@ Global:
     ResidenceNameRegex: '[^a-zA-Z0-9\\-\\_]'
     # Setting this to true sends a message to the console every time Residence does a rent expire check or a lease expire check.
     ShowIntervalMessages: false
+    # Experimental - The following settings are lists of block IDs to be used as part of the checks for the "container" and "use" flags when using mods.
+    CustomContainers: []
+    CustomBothClick: []
+    CustomRightClick: []
     # These are world flags that are applied when the player is NOT within a residence.
     Flags:
         Global: #these are default for all worlds unless specified below, they can be overridden per group
@@ -90,6 +94,20 @@ Global:
         subzone: true
         healing: true
         piston: true
+        diode: true
+        lever: true
+        button: true
+        door: true
+        table: true
+        enchant: true
+        brew: true
+        bed: true
+        cake: true
+        note: true
+        trample: false
+        burn: true
+        explode: false
+        fireball: true
     # These are default flags applied to all residences from any user group.
     ResidenceDefault:
         build: false
@@ -102,7 +120,6 @@ Global:
         piston: false
         ignite: false
         firespread: false
-        piston: false
     # These are default flags applied to the residence creator of any group.
     CreatorDefault:
         build: true
@@ -119,6 +136,10 @@ Global:
 Groups:
     Default: #group name
        # Information about the Residence zone that the player can define.
+       #Uncomment the lines below to mirror this config to other groups.
+       #Mirror:
+         #- 'group1'
+         #- 'group2'
        Residence:
            # Determins if this group can create residences or not.  This option can be overriden with the permissions node 'residence.create'
            CanCreate: true
